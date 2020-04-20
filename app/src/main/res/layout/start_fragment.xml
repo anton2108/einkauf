@@ -22,12 +22,17 @@
         android:src="@mipmap/ic_launcher_round"
         android:text="@string/logo_action" />
 
+
     <ImageView
         android:id="@+id/image_view_menu"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center"
-        android:layout_marginBottom="200dp"
+        android:layout_marginBottom="100dp"
+        android:alpha="0.95"
+        android:baselineAlignBottom="false"
+        android:fadingEdge="horizontal|vertical"
+        android:scaleType="fitXY"
         android:src="@drawable/gradient" />
 
 </FrameLayout>

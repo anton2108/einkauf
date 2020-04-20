@@ -9,6 +9,7 @@ package com.nikotin.menueinkauf;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,15 +22,11 @@ public class MainActivity extends AppCompatActivity implements NavigationHost{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.start_fragment);
 
         if (savedInstanceState == null) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .add(R.id.container, new startFragment())
-                    .commit();
+            navigateTo(new startFragment(),true);
         }
-
     }
 
     /**
@@ -51,6 +48,14 @@ public class MainActivity extends AppCompatActivity implements NavigationHost{
         }
 
         transaction.commit();
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(LOG_TAG,"Main Activity has been Resume");
+        navigateTo(new startFragment(),true);
     }
 
 }

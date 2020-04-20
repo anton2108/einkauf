@@ -9,9 +9,14 @@
     tools:context=".menuFragment" >
 
     <ImageView
-        android:id="@+id/img_view_menu"
-        android:layout_width="wrap_content"
+        android:id="@+id/image_view_menu"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_gravity="center|top"
+        android:layout_marginTop="50dp"
+        android:alpha="0.95"
+        android:baselineAlignBottom="false"
+        android:fadingEdge="horizontal|vertical"
+        android:scaleType="fitXY"
         android:src="@drawable/gradient" />
 </FrameLayout>

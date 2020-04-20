@@ -74,6 +74,7 @@ public class startFragment extends Fragment implements View.OnClickListener {
         imgViewLogo=(ImageView) v.findViewById(R.id.imageViewLogo);
         imgViewLogo.setOnClickListener(this); //DV: clicking reference to current view
         imgViewMenu=(ImageView) v.findViewById(R.id.image_view_menu);
+        imgViewMenu.setOnClickListener(this);
         //StartFragmentBinding binding = DataBindingUtil.bind(v);
         //binding.setFragment(this);
         return v;
@@ -94,6 +95,10 @@ public class startFragment extends Fragment implements View.OnClickListener {
             t.commit();
         */
         }
+        if (v==imgViewMenu){
+            ((MainActivity) getActivity()).navigateTo(new menuFragment(),true);
+        }
 
     }
+
 }
