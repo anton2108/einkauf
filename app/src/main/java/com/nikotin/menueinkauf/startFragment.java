@@ -30,6 +30,7 @@ public class startFragment extends Fragment implements View.OnClickListener {
     private static final String ARG_PARAM2 = "param2";
     private ImageView imgViewLogo;
     private ImageView imgViewMenu;
+    private RetroController menuRetroController; //used for Retrofit
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -75,6 +76,7 @@ public class startFragment extends Fragment implements View.OnClickListener {
         imgViewLogo.setOnClickListener(this); //DV: clicking reference to current view
         imgViewMenu=(ImageView) v.findViewById(R.id.image_view_menu);
         imgViewMenu.setOnClickListener(this);
+        menuRetroController=new RetroController(); //DV: für Retrofit gebraucht
         //StartFragmentBinding binding = DataBindingUtil.bind(v);
         //binding.setFragment(this);
         return v;
@@ -87,14 +89,9 @@ public class startFragment extends Fragment implements View.OnClickListener {
             Toast.makeText(getActivity(), "bubu...bubu....", Toast.LENGTH_LONG).show();
             Log.d(LOG_TAG, "ImageLogo wurde geklickt");
             Picasso.with(getContext()).load("https://www.gutekueche.ch/upload/rezept/3608/spaghetti-bolognese.jpg").into(imgViewMenu);
-            //navigieren
-            /*
-            FragmentTransaction t = this.getFragmentManager().beginTransaction();
-            menuFragment menFrag = new menuFragment();
-            t.replace(R.id.container, menFrag);
-            t.commit();
-        */
+            menuRetroController.start();
         }
+        //DV: todo: wenn auf das Bild vom Menu geklickt wird nevigieren wir auf ein neues Fragment e.g. MenuDetail
         if (v==imgViewMenu){
             ((MainActivity) getActivity()).navigateTo(new menuFragment(),true);
         }
