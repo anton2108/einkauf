@@ -18,6 +18,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 public class MainActivity extends AppCompatActivity implements NavigationHost{
     public static final String LOG_TAG="DV-Einkauf";
+    static final String BASE_URL = "https://git.eclipse.org/r/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

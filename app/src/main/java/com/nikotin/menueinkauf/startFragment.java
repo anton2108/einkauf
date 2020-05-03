@@ -5,16 +5,28 @@ import android.os.Bundle;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.squareup.picasso.Picasso;
 
+import java.util.Iterator;
+import java.util.List;
+
+import static com.nikotin.menueinkauf.MainActivity.BASE_URL;
 import static com.nikotin.menueinkauf.MainActivity.LOG_TAG;
 
 
@@ -23,14 +35,15 @@ import static com.nikotin.menueinkauf.MainActivity.LOG_TAG;
  * Use the {@link startFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class startFragment extends Fragment implements View.OnClickListener {
+public class startFragment extends Fragment implements View.OnClickListener, Callback<List<RetroMenuNormal>> {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private ImageView imgViewLogo;
     private ImageView imgViewMenu;
-    private RetroController menuRetroController; //used for Retrofit
+    private TextView txtViewMenuTitle;
+    private TextView txtViewMenuInfo;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -76,20 +89,37 @@ public class startFragment extends Fragment implements View.OnClickListener {
         imgViewLogo.setOnClickListener(this); //DV: clicking reference to current view
         imgViewMenu=(ImageView) v.findViewById(R.id.image_view_menu);
         imgViewMenu.setOnClickListener(this);
-        menuRetroController=new RetroController(); //DV: für Retrofit gebraucht
-        //StartFragmentBinding binding = DataBindingUtil.bind(v);
-        //binding.setFragment(this);
+        txtViewMenuTitle=(TextView) v.findViewById(R.id.txtViewMenueTitle);
+        txtViewMenuInfo=(TextView) v.findViewById(R.id.txtViewMenueInfo);
         return v;
+    }
+
+    private void doRandMenueCall(){
+        //DV: Part of Retrofit Code
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .create();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+
+        RetroMenuAPI retroMenuAPI = retrofit.create(RetroMenuAPI.class);
+
+        Call<List<RetroMenuNormal>> call = retroMenuAPI.loadChanges("status:open");
+        call.enqueue(this); //führt den call aus
+
     }
 
     @Override
     public void onClick(View v) {
         if (v==imgViewLogo) {
             //todo: DV-->put here the Code to react when sombody clicks the Menu Logo
-            Toast.makeText(getActivity(), "bubu...bubu....", Toast.LENGTH_LONG).show();
+            //Toast.makeText(getActivity(), "bubu...bubu....", Toast.LENGTH_LONG).show();
             Log.d(LOG_TAG, "ImageLogo wurde geklickt");
             Picasso.with(getContext()).load("https://www.gutekueche.ch/upload/rezept/3608/spaghetti-bolognese.jpg").into(imgViewMenu);
-            menuRetroController.start();
+            doRandMenueCall();
         }
         //DV: todo: wenn auf das Bild vom Menu geklickt wird nevigieren wir auf ein neues Fragment e.g. MenuDetail
         if (v==imgViewMenu){
@@ -98,4 +128,25 @@ public class startFragment extends Fragment implements View.OnClickListener {
 
     }
 
+    @Override
+    public void onResponse(Call<List<RetroMenuNormal>> call, Response<List<RetroMenuNormal>> response) {
+        //DV: The response Object is in the Body.
+        if (response.body()==null){
+            Toast.makeText(getActivity(), "Fehler: Keine gültige Antwort vom Server", Toast.LENGTH_LONG).show();
+            return;
+        }
+        Iterator<RetroMenuNormal> iter=response.body().iterator();
+
+        while(iter.hasNext()){
+            RetroMenuNormal retroResp=iter.next();
+            Log.d(LOG_TAG,retroResp.subject+"....::Retrofit Response::...."+retroResp.project);//DV: Log zum prüfen
+            txtViewMenuTitle.setText(retroResp.project);
+            txtViewMenuInfo.setText(retroResp.subject);
+        }
+    }
+
+    @Override
+    public void onFailure(Call<List<RetroMenuNormal>> call, Throwable t) {
+        Toast.makeText(getActivity(), "Service nicht erreicht. Daten konnten nicht geladen werden", Toast.LENGTH_LONG).show();
+    }
 }
