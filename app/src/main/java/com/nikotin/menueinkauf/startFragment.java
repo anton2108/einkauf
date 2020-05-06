@@ -92,7 +92,12 @@ public class startFragment extends Fragment implements View.OnClickListener{
         imgViewMenu.setOnClickListener(this);
         txtViewMenuTitle=(TextView) v.findViewById(R.id.txtViewMenueTitle);
         txtViewMenuInfo=(TextView) v.findViewById(R.id.txtViewMenueInfo);
-        doRandMenueCall();
+        if (((MainActivity) getActivity()).getSelectedMenu()==null){
+            doRandMenueCall();
+        }
+        else{
+            fillMenu();
+        }
         return v;
     }
     /**
@@ -120,10 +125,8 @@ public class startFragment extends Fragment implements View.OnClickListener{
                     Toast.makeText(getActivity(), "Fehler: Keine gültige Antwort vom Server", Toast.LENGTH_LONG).show();
                     return;
                 }
-                txtViewMenuTitle.setText(response.body().getName());
-                txtViewMenuInfo.setText(response.body().getArt()+" | "+response.body().getKueche());
-                Picasso.with(getContext()).load(response.body().bildUrl).into(imgViewMenu);
                 ((MainActivity) getActivity()).setSelectedMenu(response.body());
+                fillMenu();
             }
 
             @Override
@@ -160,6 +163,16 @@ public class startFragment extends Fragment implements View.OnClickListener{
             }
         }); //führt den call aus
         **/
+    }
+    /**
+     * DV: This Method Fills the UI Elements with MenuData
+     * */
+    public void fillMenu(){
+        MenuNormal mn=((MainActivity) getActivity()).getSelectedMenu();
+        txtViewMenuTitle.setText(mn.getName());
+        txtViewMenuInfo.setText(mn.getArt()+" | "+mn.getKueche());
+        Picasso.with(getContext()).load(mn.bildUrl).into(imgViewMenu);
+
     }
 
     @Override

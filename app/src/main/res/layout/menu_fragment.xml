@@ -19,4 +19,61 @@
         android:fadingEdge="horizontal|vertical"
         android:scaleType="fitXY"
         android:src="@drawable/gradient" />
+
+    <TextView
+        android:id="@+id/txtViewMenueTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|left"
+        android:layout_marginTop="80px"
+        android:layout_marginLeft="10px"
+        android:alpha="0.7"
+        android:background="#BEBEBE"
+        android:text=""
+        android:textColor="@android:color/black"
+        android:textSize="60px"
+        android:textStyle="bold"/>
+    <TextView
+        android:id="@+id/txtViewMenueKueche"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|left"
+        android:layout_marginTop="660px"
+        android:layout_marginLeft="10px"
+        android:alpha="0.7"
+        android:background="#BEBEBE"
+        android:text=""
+        android:textColor="@android:color/black"
+        android:textSize="40px"
+        android:textStyle="bold"/>
+    <TextView
+        android:id="@+id/txtViewMenueArt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|left"
+        android:layout_marginTop="710px"
+        android:layout_marginLeft="10px"
+        android:alpha="0.7"
+        android:background="#BEBEBE"
+        android:text=""
+        android:textColor="@android:color/black"
+        android:textSize="40px"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/txtViewMenueZutaten"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|left"
+        android:layout_marginLeft="15px"
+        android:layout_marginTop="780px"
+        android:alpha="0.7"
+        android:background="#BEBEBE"
+        android:scrollIndicators="right"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:text=""
+        android:textColor="@android:color/black"
+        android:textSize="40px" />
+
+
 </FrameLayout>

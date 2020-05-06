@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
@@ -31,6 +32,11 @@ public class menuFragment extends Fragment implements View.OnClickListener {
     private String mParam1;
     private String mParam2;
     private ImageView imgViewMenu;
+    private TextView txtViewMenuTitle;
+    private TextView txtViewMenuKueche;
+    private TextView txtViewMenuArt;
+    private TextView txtViewMenuZutaten;
+    private MenuNormal mn;
 
     public menuFragment() {
         // Required empty public constructor
@@ -71,11 +77,23 @@ public class menuFragment extends Fragment implements View.OnClickListener {
         View v=inflater.inflate(R.layout.menu_fragment, container, false);
         imgViewMenu=(ImageView) v.findViewById(R.id.image_view_menu);
         imgViewMenu.setOnClickListener(this);
-        MenuNormal mn=((MainActivity) getActivity()).getSelectedMenu();
-        Picasso.with(getContext()).load(mn.getBildUrl()).into(imgViewMenu);
-        //StartFragmentBinding binding = DataBindingUtil.bind(v);
-        //binding.setFragment(this);
+        txtViewMenuTitle=(TextView) v.findViewById(R.id.txtViewMenueTitle);
+        txtViewMenuKueche=(TextView) v.findViewById(R.id.txtViewMenueKueche);
+        txtViewMenuArt=(TextView) v.findViewById(R.id.txtViewMenueArt);
+        txtViewMenuZutaten=(TextView) v.findViewById(R.id.txtViewMenueZutaten);
+        mn=((MainActivity) getActivity()).getSelectedMenu();
+        fillMenu();
         return v;
+    }
+
+    //DV: View will be filled with information stored in the selectedMenu Object from MainActivity
+    public void fillMenu(){
+        Picasso.with(getContext()).load(mn.getBildUrl()).into(imgViewMenu);
+        txtViewMenuTitle.setText(mn.getName());
+        txtViewMenuKueche.setText("Küche: "+mn.getKueche());
+        txtViewMenuArt.setText("Art: "+mn.getArt());
+        txtViewMenuZutaten.setText("Zutaten für "+mn.getAnzPersonen().toString()+" Personen: \n"
+                +mn.getZutaten());
     }
 
     @Override
