@@ -1,5 +1,6 @@
 package com.nikotin.menueinkauf;
 
+import android.app.Activity;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -70,7 +71,8 @@ public class menuFragment extends Fragment implements View.OnClickListener {
         View v=inflater.inflate(R.layout.menu_fragment, container, false);
         imgViewMenu=(ImageView) v.findViewById(R.id.image_view_menu);
         imgViewMenu.setOnClickListener(this);
-        Picasso.with(getContext()).load("https://www.gutekueche.ch/upload/rezept/3608/spaghetti-bolognese.jpg").into(imgViewMenu);
+        MenuNormal mn=((MainActivity) getActivity()).getSelectedMenu();
+        Picasso.with(getContext()).load(mn.getBildUrl()).into(imgViewMenu);
         //StartFragmentBinding binding = DataBindingUtil.bind(v);
         //binding.setFragment(this);
         return v;

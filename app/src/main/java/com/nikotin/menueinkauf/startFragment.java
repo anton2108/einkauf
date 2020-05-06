@@ -30,12 +30,13 @@ import static com.nikotin.menueinkauf.MainActivity.BASE_URL;
 import static com.nikotin.menueinkauf.MainActivity.LOG_TAG;
 
 
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link startFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class startFragment extends Fragment implements View.OnClickListener, Callback<List<RetroMenuNormal>> {
+public class startFragment extends Fragment implements View.OnClickListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -91,9 +92,12 @@ public class startFragment extends Fragment implements View.OnClickListener, Cal
         imgViewMenu.setOnClickListener(this);
         txtViewMenuTitle=(TextView) v.findViewById(R.id.txtViewMenueTitle);
         txtViewMenuInfo=(TextView) v.findViewById(R.id.txtViewMenueInfo);
+        doRandMenueCall();
         return v;
     }
+    /**
 
+     **/
     private void doRandMenueCall(){
         //DV: Part of Retrofit Code
         Gson gson = new GsonBuilder()
@@ -107,9 +111,55 @@ public class startFragment extends Fragment implements View.OnClickListener, Cal
 
         RetroMenuAPI retroMenuAPI = retrofit.create(RetroMenuAPI.class);
 
-        Call<List<RetroMenuNormal>> call = retroMenuAPI.loadChanges("status:open");
-        call.enqueue(this); //führt den call aus
+        Call<MenuNormal> callRandMenu=retroMenuAPI.loadRandomMenu();
+        callRandMenu.enqueue(new Callback<MenuNormal>() {
+            @Override
+            public void onResponse(Call<MenuNormal> call, Response<MenuNormal> response) {
+                //DV: The response Object is in the Body.
+                if (response.body()==null){
+                    Toast.makeText(getActivity(), "Fehler: Keine gültige Antwort vom Server", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                txtViewMenuTitle.setText(response.body().getName());
+                txtViewMenuInfo.setText(response.body().getArt()+" | "+response.body().getKueche());
+                Picasso.with(getContext()).load(response.body().bildUrl).into(imgViewMenu);
+                ((MainActivity) getActivity()).setSelectedMenu(response.body());
+            }
 
+            @Override
+            public void onFailure(Call<MenuNormal> call, Throwable t) {
+                Toast.makeText(getActivity(), "Service nicht erreicht. Daten konnten nicht geladen werden", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        /**
+        //DV: The Following part of Code shows how a List Response would be handeld with JSON
+        //Example is comming from github.com
+        Call<List<RetroMenuNormal>> call = retroMenuAPI.loadRandMenue("status:open");
+        call.enqueue(new Callback<List<RetroMenuNormal>>() {
+            @Override
+            public void onResponse(Call<List<RetroMenuNormal>> call, Response<List<RetroMenuNormal>> response) {
+                //DV: The response Object is in the Body.
+                if (response.body()==null){
+                    Toast.makeText(getActivity(), "Fehler: Keine gültige Antwort vom Server", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                Iterator<RetroMenuNormal> iter=response.body().iterator();
+
+                while(iter.hasNext()){
+                    RetroMenuNormal retroResp=iter.next();
+                    Log.d(LOG_TAG,retroResp.subject+"....::Retrofit Response::...."+retroResp.project);//DV: Log zum prüfen
+                    txtViewMenuTitle.setText(retroResp.project);
+                    txtViewMenuInfo.setText(retroResp.subject);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<RetroMenuNormal>> call, Throwable t) {
+                Toast.makeText(getActivity(), "Service nicht erreicht. Daten konnten nicht geladen werden", Toast.LENGTH_LONG).show();
+            }
+        }); //führt den call aus
+        **/
     }
 
     @Override
@@ -118,7 +168,6 @@ public class startFragment extends Fragment implements View.OnClickListener, Cal
             //todo: DV-->put here the Code to react when sombody clicks the Menu Logo
             //Toast.makeText(getActivity(), "bubu...bubu....", Toast.LENGTH_LONG).show();
             Log.d(LOG_TAG, "ImageLogo wurde geklickt");
-            Picasso.with(getContext()).load("https://www.gutekueche.ch/upload/rezept/3608/spaghetti-bolognese.jpg").into(imgViewMenu);
             doRandMenueCall();
         }
         //DV: todo: wenn auf das Bild vom Menu geklickt wird nevigieren wir auf ein neues Fragment e.g. MenuDetail
@@ -128,25 +177,4 @@ public class startFragment extends Fragment implements View.OnClickListener, Cal
 
     }
 
-    @Override
-    public void onResponse(Call<List<RetroMenuNormal>> call, Response<List<RetroMenuNormal>> response) {
-        //DV: The response Object is in the Body.
-        if (response.body()==null){
-            Toast.makeText(getActivity(), "Fehler: Keine gültige Antwort vom Server", Toast.LENGTH_LONG).show();
-            return;
-        }
-        Iterator<RetroMenuNormal> iter=response.body().iterator();
-
-        while(iter.hasNext()){
-            RetroMenuNormal retroResp=iter.next();
-            Log.d(LOG_TAG,retroResp.subject+"....::Retrofit Response::...."+retroResp.project);//DV: Log zum prüfen
-            txtViewMenuTitle.setText(retroResp.project);
-            txtViewMenuInfo.setText(retroResp.subject);
-        }
-    }
-
-    @Override
-    public void onFailure(Call<List<RetroMenuNormal>> call, Throwable t) {
-        Toast.makeText(getActivity(), "Service nicht erreicht. Daten konnten nicht geladen werden", Toast.LENGTH_LONG).show();
-    }
 }

@@ -18,7 +18,9 @@ import androidx.fragment.app.FragmentTransaction;
 
 public class MainActivity extends AppCompatActivity implements NavigationHost{
     public static final String LOG_TAG="DV-Einkauf";
-    static final String BASE_URL = "https://git.eclipse.org/r/";
+    //static final String BASE_URL = "https://git.eclipse.org/r/"; // DV: für Github example
+    public static final String BASE_URL ="https://ffhs-innt-my-menu.eu-gb.mybluemix.net/";
+    private static MenuNormal selectedMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,5 +60,10 @@ public class MainActivity extends AppCompatActivity implements NavigationHost{
         Log.d(LOG_TAG,"Main Activity has been Resume");
         navigateTo(new startFragment(),true);
     }
-
+    public void setSelectedMenu(MenuNormal mn){
+        selectedMenu=mn;
+    }
+    public MenuNormal getSelectedMenu(){
+        return selectedMenu;
+    }
 }

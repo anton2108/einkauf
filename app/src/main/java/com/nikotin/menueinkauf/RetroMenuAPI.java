@@ -8,5 +8,8 @@ import retrofit2.http.Query;
 public interface RetroMenuAPI {
 
         @GET("changes/")
-        Call<List<RetroMenuNormal>> loadChanges(@Query("q") String status);
+        Call<List<RetroMenuNormal>> loadRandMenue(@Query("q") String status);
+
+        @GET("v1/menu/random")
+        Call<MenuNormal> loadRandomMenu();
 }
