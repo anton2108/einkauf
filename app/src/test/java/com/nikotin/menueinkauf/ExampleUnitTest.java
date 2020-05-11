@@ -15,3 +15,14 @@ public class ExampleUnitTest {
         assertEquals(4, 2 + 2);
     }
 }
+public class TestMenuNormal(){
+    @Test
+ public void testGetName(){
+	assertThat("", is(sameInstance( "" )));
+	assertThat(new Object(), is(notNullValue()));
+	}
+	public void TestgetMenuId(){
+	assertEquals(2, menuId.getMenuId());
+	assertTrue(menuId.getMenuId() > 0)
+	}
+}
